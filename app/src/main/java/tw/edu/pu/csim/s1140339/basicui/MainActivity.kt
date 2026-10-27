@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -61,6 +62,7 @@ fun Main( modifier: Modifier = Modifier) {
         LazyColumnExample(modifier)
         ColumnExample(modifier)
         TextFieldExample(modifier)
+        AnimalCenterRow(modifier)
     }
 }
 
@@ -68,7 +70,9 @@ fun Main( modifier: Modifier = Modifier) {
 
 @Composable
 fun LazyColumnExample( modifier: Modifier = Modifier) {
-    LazyColumn(
+
+
+        LazyColumn(
         modifier = modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -132,10 +136,49 @@ fun RowExample(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.compose),
             contentDescription = "Compose icon",
             modifier = Modifier.size(100.dp)
-        )
+        )}
+
+
+    }
+
+
+@Composable
+fun AnimalCenterRow(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            // 鴨子
+            Image(
+                painter = painterResource(id = R.drawable.animal0),
+                contentDescription = "鴨子",
+                modifier = Modifier.size(80.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // 企鵝
+            Image(
+                painter = painterResource(id = R.drawable.animal1),
+                contentDescription = "企鵝",
+                modifier = Modifier.size(80.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // 青蛙
+            Image(
+                painter = painterResource(id = R.drawable.animal2),
+                contentDescription = "青蛙",
+                modifier = Modifier.size(80.dp)
+            )
+        }
     }
 }
-
 
 @Composable
 fun TextFieldExample(modifier: Modifier = Modifier) {
@@ -162,3 +205,7 @@ fun TextFieldExample(modifier: Modifier = Modifier) {
         )
     }
 }
+
+
+
+
