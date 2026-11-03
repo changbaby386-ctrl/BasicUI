@@ -53,6 +53,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import tw.edu.pu.csim.s1140339.basicui.ui.theme.BasicUITheme
+import androidx.compose.material3.Button
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,7 +85,8 @@ fun Main( modifier: Modifier = Modifier) {
         TextFieldExample(modifier)
         AnimalCenterRow(modifier)
         LazyRowExample(modifier)
-        SimpleVideoPlayer(R.raw.love)
+        // SimpleVideoPlayer(R.raw.love)
+        SwitchableVideoPlayer()
 
     }
 }
@@ -335,5 +337,51 @@ fun SimpleVideoPlayer(
             .height(200.dp)
     )
 }
+@Composable
+fun SwitchableVideoPlayer() {
+    val context = LocalContext.current
 
+    // true = love.mp4, false = handpan.mp4
+    var isLove by remember { mutableStateOf(true) }
+
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            val uri = "android.resource://${context.packageName}/${R.raw.love}"
+            setMediaItem(MediaItem.fromUri(uri))
+            prepare()
+            playWhenReady = true
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { exoPlayer.release() }
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AndroidView(
+            factory = { ctx ->
+                PlayerView(ctx).apply { player = exoPlayer }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+        )
+
+        Button(
+            onClick = {
+                isLove = !isLove
+                val res = if (isLove) R.raw.love else R.raw.handpan
+                val uri = "android.resource://${context.packageName}/$res"
+                exoPlayer.setMediaItem(MediaItem.fromUri(uri))
+                exoPlayer.prepare()
+                exoPlayer.playWhenReady = true
+            }
+        ) {
+            Text(if (isLove) "切換至手碟影片" else "切換至Love影片")
+        }
+    }
+}
 
